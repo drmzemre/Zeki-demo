@@ -18,85 +18,74 @@ st.markdown(f"""
 
 header, footer, #MainMenu {{visibility: hidden;}}
 
-/* ARKA PLAN */
 .stApp {{
     background-image: url("data:image/png;base64,{img}");
     background-size: cover;
     background-position: center;
 }}
 
-/* GRID YAPI */
-.main {{
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    justify-content: space-between;
+/* ORTALAMA */
+.block-container {{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    height:100vh;
 }}
 
-/* ÜST */
-.top {{
-    text-align: center;
-    margin-top: 40px;
-    font-size: 34px;
-    color: white;
-    font-weight: bold;
-}}
-
-/* ALT BLOK */
-.bottom {{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 80px;
+/* BAŞLIK */
+.title {{
+    font-size:34px;
+    color:white;
+    font-weight:bold;
+    margin-bottom:30px;
 }}
 
 /* INPUT */
 textarea {{
-    width: 600px !important;
-    background-color: #1e1e1e !important;
-    color: white !important;
-    border-radius: 10px !important;
-    padding: 14px !important;
+    width:600px !important;
+    background:#1e1e1e !important;
+    color:white !important;
+    border-radius:10px !important;
 }}
 
 /* BUTON */
 button {{
-    background-color: black !important;
-    color: white !important;
-    border-radius: 8px !important;
-    padding: 10px 25px !important;
-    margin-top: 10px;
+    background:black !important;
+    color:white !important;
+    border-radius:8px !important;
+    margin-top:10px;
 }}
 
 /* SONUÇ */
 .result {{
-    background-color: #ff7a00;
-    color: white;
-    padding: 20px;
-    border-radius: 12px;
-    font-weight: bold;
-    margin-top: 20px;
-    width: 600px;
+    background:#ff7a00;
+    color:white;
+    padding:20px;
+    border-radius:12px;
+    font-weight:bold;
+    margin-top:25px;
+    width:600px;
 }}
 
 </style>
 """, unsafe_allow_html=True)
 
-# 🎯 ÜST BAŞLIK
-st.markdown('<div class="top">Ürün Değişim Değerlendirme</div>', unsafe_allow_html=True)
+# 🎯 BAŞLIK
+st.markdown('<div class="title">Ürün Değişim Değerlendirme</div>', unsafe_allow_html=True)
 
-# 🎯 ALT BLOK (ORTA-ALT)
-st.markdown('<div class="bottom">', unsafe_allow_html=True)
-
+# 📥 INPUT
 fis_input = st.text_area(
     "Fiş Numaraları (virgül ile ayır)",
     placeholder="Örn: 50930232,504258239,12345678"
 )
 
-buton = st.button("İŞE BAŞLA")
+# 🔥 SESSION STATE (KRİTİK)
+if "sonuc" not in st.session_state:
+    st.session_state.sonuc = ""
 
-# 🚀 ÇALIŞMA BLOĞU
-if buton:
+# 🚀 BUTON
+if st.button("İŞE BAŞLA"):
 
     if not fis_input.strip():
         st.warning("Fiş girilmedi")
@@ -131,8 +120,13 @@ if buton:
 
             sonuc_list.append(sonuc)
 
-        final = "<br><br>".join(sonuc_list)
+        # 🔥 SONUCU KAYDET
+        st.session_state.sonuc = "<br><br>".join(sonuc_list)
 
-        st.markdown(f'<div class="result">{final}</div>', unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
+# 🎯 HER ZAMAN GÖSTER
+if st.session_state.sonuc:
+    st.markdown(f"""
+    <div class="result">
+    {st.session_state.sonuc}
+    </div>
+    """, unsafe_allow_html=True)
