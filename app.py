@@ -3,6 +3,13 @@ import time
 import random
 import base64
 
+# 🔥 STREAMLIT HEADER KAPAT
+st.markdown("""
+<style>
+header {visibility: hidden;}
+</style>
+""", unsafe_allow_html=True)
+
 # 🔥 ARKA PLAN (dia.png)
 def get_base64(file):
     with open(file, "rb") as f:
@@ -10,110 +17,119 @@ def get_base64(file):
 
 img = get_base64("dia.png")
 
-st.markdown(
-    f"""
-    <style>
-    .stApp {{
-        background-image: url("data:image/png;base64,{img}");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-    }}
+# 🎨 CSS TASARIM
+st.markdown(f"""
+<style>
 
-    /* ÜST BAR */
-    .top-bar {{
-        background-color: rgba(60,60,60,0.9);
-        padding: 10px 20px;
-        color: white;
-        font-size: 18px;
-        font-weight: bold;
-        border-radius: 6px;
-        width: 60%;
-        margin: 30px auto 0 auto;
-    }}
+.stApp {{
+    background-image: url("data:image/png;base64,{img}");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}}
 
-    /* KULLANICI */
-    .user-box {{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 20px;
-    }}
+/* ÜST BAR */
+.top-bar {{
+    background-color: rgba(60,60,60,0.9);
+    padding: 10px 20px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 6px;
+    width: 60%;
+    margin: 40px auto 0 auto;
+    text-align: center;
+}}
 
-    .user-avatar {{
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background-color: #2ecc71;
-        margin-right: 15px;
-    }}
+/* KULLANICI */
+.user-box {{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}}
 
-    .user-name {{
-        font-size: 20px;
-        font-weight: bold;
-        color: black;
-    }}
+.user-avatar {{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #2ecc71;
+    margin-right: 15px;
+}}
 
-    /* ANA PANEL */
-    .main-card {{
-        background-color: rgba(255,255,255,0.92);
-        padding: 25px;
-        border-radius: 10px;
-        margin-top: 20px;
-        width: 60%;
-        margin-left: auto;
-        margin-right: auto;
-    }}
+.user-name {{
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+}}
 
-    /* SONUÇ */
-    .result-box {{
-        background-color: #d4edda;
-        padding: 15px;
-        border-radius: 8px;
-        margin-top: 15px;
-        font-size: 16px;
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+/* ANA PANEL */
+.main-card {{
+    background-color: rgba(255,255,255,0.95);
+    padding: 30px;
+    border-radius: 12px;
+    margin-top: 180px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}}
+
+/* SONUÇ KUTUSU */
+.result-box {{
+    background-color: #ff7a00;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}}
+
+</style>
+""", unsafe_allow_html=True)
 
 # 🔝 ÜST BAR
 st.markdown('<div class="top-bar">☰ Dia</div>', unsafe_allow_html=True)
 
 # 👤 KULLANICI
-st.markdown(
-    """
-    <div class="user-box">
-        <div class="user-avatar"></div>
-        <div class="user-name">Emre Durmaz</div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+st.markdown("""
+<div class="user-box">
+    <div class="user-avatar"></div>
+    <div class="user-name">Emre Durmaz</div>
+</div>
+""", unsafe_allow_html=True)
 
 # 📦 PANEL
 st.markdown('<div class="main-card">', unsafe_allow_html=True)
 
 st.write("Dia - Online Arçelik Ürün Değişim Sistemlerine Hoşgeldiniz...")
 
-fis = st.text_input("Fiş No")
+# 📥 ÇOKLU FİŞ GİRİŞİ
+fis_input = st.text_area("Fiş Numaraları (virgül ile ayır)")
 
-if st.button("DEĞERLENDİR"):
+# 🚀 BUTON
+if st.button("İŞE BAŞLA"):
 
-    with st.spinner("Zeki değerlendiriyor..."):
+    with st.spinner("Zeki tüm kayıtları inceliyor..."):
         time.sleep(2)
 
-    hedef = random.choice(["Hedef Altı", "Hedef Üstü"])
-    fiyat = random.choice([8000, 12000, 15000])
+    fis_list = [f.strip() for f in fis_input.split(",") if f.strip()]
 
-    if hedef == "Hedef Altı":
-        sonuc = f"{fis} numaralı fiş hedef altı, {fiyat} TL fatura talep edildi, kayıt servise yönlendirildi."
-    else:
-        dekont = int(fiyat * 0.40)
-        fatura = fiyat - dekont
-        sonuc = f"{fis} numaralı fiş hedef üstü, {fatura} TL fatura ve {dekont} TL dekont talep edildi, kayıt servise yönlendirildi."
+    tum_sonuclar = ""
 
-    st.markdown(f'<div class="result-box">{sonuc}</div>', unsafe_allow_html=True)
+    for fis in fis_list:
+        hedef = random.choice(["Hedef Altı", "Hedef Üstü"])
+        fiyat = random.choice([8000, 12000, 15000])
+
+        if hedef == "Hedef Altı":
+            sonuc = f"{fis} numaralı fiş hedef altı, {fiyat} TL fatura talep edildi, kayıt servise yönlendirildi."
+        else:
+            dekont = int(fiyat * 0.40)
+            fatura = fiyat - dekont
+            sonuc = f"{fis} numaralı fiş hedef üstü, {fatura} TL fatura ve {dekont} TL dekont talep edildi, kayıt servise yönlendirildi."
+
+        tum_sonuclar += f"<p>{sonuc}</p>"
+
+    st.markdown(f'<div class="result-box">{tum_sonuclar}</div>', unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
