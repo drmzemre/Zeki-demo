@@ -1,21 +1,3 @@
-st.markdown(
-    """
-    <style>
-    .stApp {
-        background-image: url("https://images.unsplash.com/photo-1581090700227-4c4c5f0e1b5f");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-    }
-
-    .block-container {
-        background-color: rgba(0,0,0,0.7);
-        padding: 2rem;
-        border-radius: 10px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True)
 import streamlit as st
 import time
 import random
