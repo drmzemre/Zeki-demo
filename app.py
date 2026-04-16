@@ -3,12 +3,12 @@ import time
 import random
 import base64
 
-# 🔥 ARKA PLAN GÖRSELİ (bg.png)
+# 🔥 ARKA PLAN (dia.png)
 def get_base64(file):
     with open(file, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-img = get_base64("bg.png")
+img = get_base64("dia.png")
 
 st.markdown(
     f"""
@@ -22,17 +22,21 @@ st.markdown(
 
     /* ÜST BAR */
     .top-bar {{
-        background-color: #3c3c3c;
+        background-color: rgba(60,60,60,0.9);
         padding: 10px 20px;
         color: white;
         font-size: 18px;
         font-weight: bold;
+        border-radius: 6px;
+        width: 60%;
+        margin: 30px auto 0 auto;
     }}
 
     /* KULLANICI */
     .user-box {{
         display: flex;
         align-items: center;
+        justify-content: center;
         margin-top: 20px;
     }}
 
@@ -56,6 +60,9 @@ st.markdown(
         padding: 25px;
         border-radius: 10px;
         margin-top: 20px;
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
     }}
 
     /* SONUÇ */
@@ -85,15 +92,13 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# 📦 ANA PANEL
+# 📦 PANEL
 st.markdown('<div class="main-card">', unsafe_allow_html=True)
 
 st.write("Dia - Online Arçelik Ürün Değişim Sistemlerine Hoşgeldiniz...")
 
-# 📥 FİŞ
 fis = st.text_input("Fiş No")
 
-# 🚀 BUTON
 if st.button("DEĞERLENDİR"):
 
     with st.spinner("Zeki değerlendiriyor..."):
