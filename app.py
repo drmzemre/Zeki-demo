@@ -21,8 +21,8 @@ header, footer, #MainMenu {{visibility: hidden;}}
     background-size: cover;
     background-position: center;
 }}
-"<h1 style='text-align:center; color:white;'>ZEKİ AGENT</h1>",
-    unsafe_allow_html=True
+</style>
+""", unsafe_allow_html=True)
 
 # 🎯 BAŞLIK
 st.markdown(
