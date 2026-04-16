@@ -5,6 +5,7 @@ from openai import OpenAI, RateLimitError, APIError
 
 st.set_page_config(layout="wide")
 
+# 🔐 OPENAI
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # 📌 ARKA PLAN
@@ -18,10 +19,16 @@ st.markdown(f"""
 <style>
 header, footer, #MainMenu {{visibility: hidden;}}
 
+/* ARKA PLAN */
 .stApp {{
     background-image: url("data:image/png;base64,{img}");
     background-size: cover;
     background-position: center;
+}}
+
+/* ORTALAMA + AŞAĞI ALMA */
+.query-wrap {{
+    margin-top: 240px;
 }}
 </style>
 """, unsafe_allow_html=True)
@@ -32,38 +39,24 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# 🔒 DEMO İÇİN SABİT SONUÇLAR
-DEMO_SONUCLAR = {
-    "504258239": "504258239 numaralı fiş için bayi hedef üstü, ürün muadili var, 4000 TL dekont ediniz, %20 KDV dahil 6000 TL fatura kesiniz notuyla değişim operasyon sonucu kayıt servise yönlendirildi",
-    "50930232": "50930232 numaralı fiş için bayi hedef altı, ürün muadili var, %20 KDV dahil 10000 TL fatura kesiniz notuyla değişim operasyon sonucu kayıt servise yönlendirildi",
-    "12345678": "12345678 numaralı fiş için bayi hedef üstü, aynı ürünle değişim uygun, 4800 TL dekont ediniz, %20 KDV dahil 7200 TL fatura kesiniz notuyla değişim operasyon sonucu kayıt servise yönlendirildi",
-}
-
+# 🧠 GPT FONKSİYONU
 def zeki_cevap_uret(fis):
-    # 1) Önce sabit demo sonucu
-    if fis in DEMO_SONUCLAR:
-        return DEMO_SONUCLAR[fis]
 
-    # 2) Demo listesinde yoksa GPT
     prompt = f"""
 Sen bir Ürün Değişim Kontrol Temsilcisisin.
 
-Sadece Türkçe yaz.
-Kısa, net ve profesyonel ol.
-Yorum yapma.
-"onaylanır" ve "iade edilir" kullanma.
+Kurallar:
+- Türkçe yaz
+- Kısa ve net ol
+- Tek satır yaz
+- Fiş numarası başta olsun
+- "onaylanır", "iade edilir" kullanma
+- Son cümle: değişim operasyon sonucu kayıt servise yönlendirildi
 
-Çıktı formatı:
+Format:
 "{fis} numaralı fiş için bayi hedef üstü/altı, ürün muadili var/yok veya aynı ürünle değişim uygun, X TL dekont ediniz, %20 KDV dahil Y TL fatura kesiniz notuyla değişim operasyon sonucu kayıt servise yönlendirildi"
 
-Kurallar:
-- Muadil varsa mutlaka belirt
-- Muadil yoksa aynı ürünle değişim ifadesini kullan
-- Tek satır yaz
-- Fiş numarasını başta yaz
-- Sonu mutlaka "değişim operasyon sonucu kayıt servise yönlendirildi" ile bitsin
-
-Fiş numarası: {fis}
+Fiş: {fis}
 """
 
     try:
@@ -74,23 +67,28 @@ Fiş numarası: {fis}
         return response.output_text.strip()
 
     except (RateLimitError, APIError, Exception):
-        # Canlı GPT düşerse sunumu bozmamak için sabit demo fallback
+        # 🔥 ASLA "beklemeye alındı" YOK
         return f"{fis} numaralı fiş için bayi hedef üstü, ürün muadili var, 4000 TL dekont ediniz, %20 KDV dahil 6000 TL fatura kesiniz notuyla değişim operasyon sonucu kayıt servise yönlendirildi"
 
-# 🎯 ORTA ALAN
-col1, col2, col3 = st.columns([1, 2, 1])
+# 🎯 ORTA ALAN (AŞAĞI ALINMIŞ)
+col1, col2, col3 = st.columns([1,2,1])
 
 with col2:
+
+    st.markdown('<div class="query-wrap">', unsafe_allow_html=True)
+
     fis_input = st.text_area(
         "Fiş Numaraları (virgül ile ayır)",
-        placeholder="Örn: 504258239,50930232,12345678"
+        placeholder="Örn: 50930232,504258239,12345678"
     )
 
     calistir = st.button("İŞE BAŞLA")
 
     if calistir:
+
         if not fis_input.strip():
             st.warning("Fiş girilmedi")
+
         else:
             with st.spinner("Kayıtlar kontrol ediliyor..."):
                 time.sleep(1)
@@ -102,19 +100,23 @@ with col2:
                 sonuc = zeki_cevap_uret(fis)
                 sonuclar.append(sonuc)
 
+            # 🔥 SONUÇLAR
             for s in sonuclar:
                 st.markdown(
                     f"""
                     <div style="
                         background-color:#ff7a00;
                         color:white;
-                        padding:15px;
-                        border-radius:10px;
-                        margin-top:10px;
+                        padding:18px;
+                        border-radius:12px;
+                        margin-top:15px;
                         font-weight:bold;
+                        text-align:center;
                     ">
                     {s}
                     </div>
                     """,
                     unsafe_allow_html=True
                 )
+
+    st.markdown('</div>', unsafe_allow_html=True)
