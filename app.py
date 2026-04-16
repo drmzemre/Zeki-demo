@@ -1,32 +1,24 @@
 import streamlit as st
 import time
+import random
 
 st.title("Ürün Değişim Onay Sistemi")
 
 fis = st.text_input("Fiş No")
-notu = st.text_area("Servis Notu")
-barkod = st.selectbox("Barkod", ["Okutuldu", "Okutulmadı"])
-hedef = st.selectbox("Hedef", ["Hedef Altı", "Hedef Üstü"])
 
 if st.button("DEĞERLENDİR"):
-    with st.spinner("Kontrol ediliyor..."):
+
+    with st.spinner("Kontroller yapılıyor..."):
         time.sleep(2)
 
-    if barkod == "Okutulmadı":
-        st.error("Kayıt servise yönlendirildi")
-        st.write("Barkod okutunuz")
+    hedef = random.choice(["Hedef Altı", "Hedef Üstü"])
+    vergili_fiyat = random.choice([8000, 12000, 15000])
 
-    elif "memnun değil" in notu.lower():
-        st.error("Değişim uygun değildir")
-
+    if hedef == "Hedef Altı":
+        sonuc = f"{fis} numaralı fiş hedef altı, {vergili_fiyat} TL fatura talep edildi, kayıt servise yönlendirildi."
     else:
-        st.success("Kayıt servise yönlendirildi")
+        dekont = int(vergili_fiyat * 0.40)
+        fatura = vergili_fiyat - dekont
+        sonuc = f"{fis} numaralı fiş hedef üstü, {fatura} TL fatura ve {dekont} TL dekont talep edildi, kayıt servise yönlendirildi."
 
-        if hedef == "Hedef Üstü":
-            fiyat = 12000
-            dekont = int(fiyat * 0.40)
-            fatura = fiyat - dekont
-
-            st.write(f"Vergili fiyat: {fiyat}")
-            st.write(f"Dekont: {dekont}")
-            st.write(f"Fatura: {fatura}")
+    st.success(sonuc)
