@@ -2,65 +2,105 @@ import streamlit as st
 import time
 import random
 
-# 🔥 ARKA PLAN + TASARIM
+# 🔥 ARKA PLAN (SENİN GÖRSELİN)
 st.markdown(
     """
     <style>
     .stApp {
-        background-image: url("https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d");
+        background-image: url("https://i.imgur.com/CHD9RRX.png");
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
     }
 
-    section.main > div {
-        background-color: rgba(0,0,0,0.65);
-        padding: 2rem;
-        border-radius: 15px;
-    }
-
-    h1 {
-        text-align: center;
-        font-size: 42px;
-    }
-
-    .result-box {
-        background-color: rgba(0, 128, 0, 0.8);
-        padding: 15px;
-        border-radius: 10px;
+    /* ÜST BAR (Dia tarzı) */
+    .top-bar {
+        background-color: #3c3c3c;
+        padding: 10px 20px;
+        color: white;
         font-size: 18px;
+        font-weight: bold;
+    }
+
+    /* Kullanıcı alanı */
+    .user-box {
+        display: flex;
+        align-items: center;
         margin-top: 20px;
+        color: black;
+    }
+
+    .user-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-image: url("https://i.imgur.com/6VBx3io.png");
+        background-size: cover;
+        margin-right: 15px;
+    }
+
+    .user-name {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    /* Panel */
+    .main-card {
+        background-color: rgba(255,255,255,0.9);
+        padding: 25px;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+
+    /* Sonuç kutusu */
+    .result-box {
+        background-color: #d4edda;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
+        font-size: 16px;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# 🎯 BAŞLIK
-st.markdown("<h1>Ürün Değişim Onay Sistemi</h1>", unsafe_allow_html=True)
+# 🔝 ÜST BAR
+st.markdown('<div class="top-bar">☰ Dia</div>', unsafe_allow_html=True)
 
-# 📌 KULLANICI ALANI (isteğe bağlı üst etki)
-st.markdown("### 👤 Emre Durmaz")
+# 👤 KULLANICI
+st.markdown(
+    """
+    <div class="user-box">
+        <div class="user-avatar"></div>
+        <div class="user-name">Emre Durmaz</div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-# 📥 FİŞ GİRİŞ
+# 📦 ANA PANEL
+st.markdown('<div class="main-card">', unsafe_allow_html=True)
+
+st.markdown("**Dia - Online Arçelik Ürün Değişim Sistemlerine Hoşgeldiniz...**")
+
 fis = st.text_input("Fiş No")
 
-# 🚀 BUTON
 if st.button("DEĞERLENDİR"):
 
     with st.spinner("Zeki değerlendiriyor..."):
         time.sleep(2)
 
-    # 🎲 DEMO KARAR MOTORU
     hedef = random.choice(["Hedef Altı", "Hedef Üstü"])
-    vergili_fiyat = random.choice([8000, 12000, 15000])
+    fiyat = random.choice([8000, 12000, 15000])
 
     if hedef == "Hedef Altı":
-        sonuc = f"{fis} numaralı fiş hedef altı, {vergili_fiyat} TL fatura talep edildi, kayıt servise yönlendirildi."
+        sonuc = f"{fis} numaralı fiş hedef altı, {fiyat} TL fatura talep edildi, kayıt servise yönlendirildi."
     else:
-        dekont = int(vergili_fiyat * 0.40)
-        fatura = vergili_fiyat - dekont
+        dekont = int(fiyat * 0.40)
+        fatura = fiyat - dekont
         sonuc = f"{fis} numaralı fiş hedef üstü, {fatura} TL fatura ve {dekont} TL dekont talep edildi, kayıt servise yönlendirildi."
 
-    # 🎯 SONUÇ GÖSTERİMİ
     st.markdown(f'<div class="result-box">{sonuc}</div>', unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
