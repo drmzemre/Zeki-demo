@@ -1,11 +1,14 @@
 import streamlit as st
 import time
-import random
 import base64
+from openai import OpenAI
 
 st.set_page_config(layout="wide")
 
-# 📌 ARKA PLAN
+# 🔐 OPENAI
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
+# 📌 ARKA PLAN (AYNI - DOKUNMADIM)
 def get_base64(file):
     with open(file, "rb") as f:
         return base64.b64encode(f.read()).decode()
@@ -24,13 +27,39 @@ header, footer, #MainMenu {{visibility: hidden;}}
 </style>
 """, unsafe_allow_html=True)
 
-# 🎯 BAŞLIK
+# 🎯 BAŞLIK (İSTERSEN BURAYI ZEKİ AGENT YAPARSIN)
 st.markdown(
     "<h1 style='text-align:center; color:white;'>Ürün Değişim Değerlendirme</h1>",
     unsafe_allow_html=True
 )
 
-# 🎯 ORTA ALAN
+# 🧠 GPT FONKSİYONU (SADE + SENİN FORMAT)
+def zeki_cevap_uret(fis):
+
+    prompt = f"""
+Sen bir Ürün Değişim Kontrol Temsilcisisin.
+
+Kurallar:
+- Türkçe yaz
+- Kısa ve net ol
+- "onaylanır", "iade edilir" kullanma
+- Tek satır sonuç ver
+- Fiş numarasını mutlaka yaz
+- Sonu "kayıt servise yönlendirildi" ile bitmeli
+
+Fiş: {fis}
+
+Sadece operasyon sonucu üret.
+"""
+
+    response = client.responses.create(
+        model="gpt-5.4",
+        input=prompt
+    )
+
+    return response.output_text.strip()
+
+# 🎯 ORTA ALAN (AYNI - DOKUNMADIM)
 col1, col2, col3 = st.columns([1,2,1])
 
 with col2:
@@ -41,42 +70,23 @@ with col2:
 
     calistir = st.button("İŞE BAŞLA")
 
-    # 🔥 SONUÇ BURADA GÖRÜNECEK
+    # 🔥 SONUÇ BURADA GÖRÜNECEK (AYNI TASARIM)
     if calistir:
 
         if not fis_input.strip():
             st.warning("Fiş girilmedi")
         else:
-            time.sleep(1)
+            with st.spinner("Kayıtlar kontrol ediliyor..."):
+                time.sleep(1)
 
             fis_list = [f.strip() for f in fis_input.split(",") if f.strip()]
             sonuclar = []
 
             for fis in fis_list:
-
-                hedef = random.choice(["Hedef Altı", "Hedef Üstü"])
-                fiyat = random.choice([8000, 10000, 12000])
-                stok = random.choice([True, False])
-
-                if hedef == "Hedef Altı":
-
-                    if stok:
-                        sonuc = f"{fis} numaralı fiş için 20% KDV dahil {fiyat} TL fatura kesiniz notuyla kayıt servise yönlendirildi"
-                    else:
-                        sonuc = f"{fis} numaralı fiş için muadil ürün önerilir, 20% KDV dahil {fiyat} TL fatura kesiniz notuyla kayıt servise yönlendirildi"
-
-                else:
-                    dekont = int(fiyat * 0.40)
-                    fatura = fiyat - dekont
-
-                    if stok:
-                        sonuc = f"{fis} numaralı fiş için {dekont} TL dekont ediniz, 20% KDV dahil {fatura} TL fatura kesiniz notuyla kayıt servise yönlendirildi"
-                    else:
-                        sonuc = f"{fis} numaralı fiş için muadil ürün önerilir, {dekont} TL dekont ediniz, 20% KDV dahil {fatura} TL fatura kesiniz notuyla kayıt servise yönlendirildi"
-
+                sonuc = zeki_cevap_uret(fis)
                 sonuclar.append(sonuc)
 
-            # 🔥 SONUÇ (KESİN GÖRÜNÜR)
+            # 🔥 TURUNCU SONUÇ BLOĞU (AYNI)
             for s in sonuclar:
                 st.markdown(
                     f"""
