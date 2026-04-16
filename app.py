@@ -3,21 +3,19 @@ import time
 import random
 import base64
 
-# 📌 SAYFA AYARI
 st.set_page_config(layout="wide")
 
-# 📌 ARKA PLAN (dia.png)
+# 📌 BACKGROUND
 def get_base64(file):
     with open(file, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
 img = get_base64("dia.png")
 
-# 🎨 CSS
+# 🎨 STYLE
 st.markdown(f"""
 <style>
 
-/* ÜST MENÜLERİ KALDIR */
 header, footer, #MainMenu {{visibility: hidden;}}
 
 /* ARKA PLAN */
@@ -25,25 +23,31 @@ header, footer, #MainMenu {{visibility: hidden;}}
     background-image: url("data:image/png;base64,{img}");
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
 }}
 
-/* TÜM İÇERİĞİ ORTALA */
-.block-container {{
+/* GRID YAPI */
+.main {{
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-top: 120px;
+    height: 100vh;
+    justify-content: space-between;
 }}
 
-/* BAŞLIK */
-.title {{
+/* ÜST */
+.top {{
+    text-align: center;
+    margin-top: 40px;
     font-size: 34px;
     color: white;
     font-weight: bold;
-    margin-bottom: 30px;
-    text-align: center;
+}}
+
+/* ALT BLOK */
+.bottom {{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 80px;
 }}
 
 /* INPUT */
@@ -51,48 +55,48 @@ textarea {{
     width: 600px !important;
     background-color: #1e1e1e !important;
     color: white !important;
-    border-radius: 12px !important;
+    border-radius: 10px !important;
     padding: 14px !important;
-    font-size: 16px !important;
-    border: none !important;
 }}
 
 /* BUTON */
 button {{
     background-color: black !important;
     color: white !important;
-    border-radius: 10px !important;
+    border-radius: 8px !important;
     padding: 10px 25px !important;
-    font-weight: bold !important;
     margin-top: 10px;
 }}
 
-/* SONUÇ BLOĞU */
+/* SONUÇ */
 .result {{
     background-color: #ff7a00;
     color: white;
     padding: 20px;
-    border-radius: 14px;
-    font-size: 16px;
+    border-radius: 12px;
     font-weight: bold;
-    margin-top: 30px;
+    margin-top: 20px;
     width: 600px;
 }}
 
 </style>
 """, unsafe_allow_html=True)
 
-# 🎯 BAŞLIK
-st.markdown("<div class='title'>Ürün Değişim Değerlendirme</div>", unsafe_allow_html=True)
+# 🎯 ÜST BAŞLIK
+st.markdown('<div class="top">Ürün Değişim Değerlendirme</div>', unsafe_allow_html=True)
 
-# 📥 INPUT
+# 🎯 ALT BLOK (ORTA-ALT)
+st.markdown('<div class="bottom">', unsafe_allow_html=True)
+
 fis_input = st.text_area(
     "Fiş Numaraları (virgül ile ayır)",
     placeholder="Örn: 50930232,504258239,12345678"
 )
 
-# 🚀 BUTON
-if st.button("İŞE BAŞLA"):
+buton = st.button("İŞE BAŞLA")
+
+# 🚀 ÇALIŞMA BLOĞU
+if buton:
 
     if not fis_input.strip():
         st.warning("Fiş girilmedi")
@@ -101,16 +105,14 @@ if st.button("İŞE BAŞLA"):
             time.sleep(1)
 
         fis_list = [f.strip() for f in fis_input.split(",") if f.strip()]
-
-        tum_sonuclar = []
+        sonuc_list = []
 
         for fis in fis_list:
 
             hedef = random.choice(["Hedef Altı", "Hedef Üstü"])
-            fiyat = random.choice([8000, 10000, 12000, 15000])
+            fiyat = random.choice([8000, 10000, 12000])
             stok = random.choice([True, False])
 
-            # 🔽 HEDEF ALTI
             if hedef == "Hedef Altı":
 
                 if stok:
@@ -118,7 +120,6 @@ if st.button("İŞE BAŞLA"):
                 else:
                     sonuc = f"{fis} numaralı fiş için muadil ürün önerilir, 20% KDV dahil {fiyat} TL fatura kesiniz notuyla kayıt servise yönlendirildi"
 
-            # 🔽 HEDEF ÜSTÜ
             else:
                 dekont = int(fiyat * 0.40)
                 fatura = fiyat - dekont
@@ -128,12 +129,10 @@ if st.button("İŞE BAŞLA"):
                 else:
                     sonuc = f"{fis} numaralı fiş için muadil ürün önerilir, {dekont} TL dekont ediniz, 20% KDV dahil {fatura} TL fatura kesiniz notuyla kayıt servise yönlendirildi"
 
-            tum_sonuclar.append(sonuc)
+            sonuc_list.append(sonuc)
 
-        sonuc_html = "<br><br>".join(tum_sonuclar)
+        final = "<br><br>".join(sonuc_list)
 
-        st.markdown(f"""
-        <div class="result">
-        {sonuc_html}
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f'<div class="result">{final}</div>', unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
