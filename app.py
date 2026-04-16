@@ -3,78 +3,57 @@ import time
 import random
 import base64
 
-# 🔥 STREAMLIT HEADER KAPAT
+# 🔥 HEADER VE MENÜ KALDIR
 st.markdown("""
 <style>
 header {visibility: hidden;}
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
 
-# 🔥 ARKA PLAN (dia.png)
+# 🔥 ARKA PLAN (blur + karartma)
 def get_base64(file):
     with open(file, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
 img = get_base64("dia.png")
 
-# 🎨 CSS TASARIM
 st.markdown(f"""
 <style>
-
 .stApp {{
-    background-image: url("data:image/png;base64,{img}");
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url("data:image/png;base64,{img}");
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
 }}
 
-/* ÜST BAR */
-.top-bar {{
-    background-color: rgba(60,60,60,0.9);
-    padding: 10px 20px;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 6px;
-    width: 60%;
-    margin: 40px auto 0 auto;
+/* ANA KUTU */
+.main-box {{
+    background: rgba(255,255,255,0.95);
+    padding: 40px;
+    border-radius: 12px;
+    width: 40%;
+    margin: 120px auto;
     text-align: center;
 }}
 
-/* KULLANICI */
-.user-box {{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
+/* INPUT */
+textarea {{
+    background-color: #2c2f36 !important;
+    color: white !important;
+    border-radius: 8px !important;
 }}
 
-.user-avatar {{
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: #2ecc71;
-    margin-right: 15px;
+/* BUTON */
+button {{
+    background-color: #111 !important;
+    color: white !important;
+    border-radius: 8px !important;
+    padding: 10px 20px !important;
 }}
 
-.user-name {{
-    font-size: 20px;
-    font-weight: bold;
-    color: black;
-}}
-
-/* ANA PANEL */
-.main-card {{
-    background-color: rgba(255,255,255,0.95);
-    padding: 30px;
-    border-radius: 12px;
-    margin-top: 180px;
-    width: 50%;
-    margin-left: auto;
-    margin-right: auto;
-}}
-
-/* SONUÇ KUTUSU */
+/* SONUÇ */
 .result-box {{
     background-color: #ff7a00;
     color: white;
@@ -83,34 +62,22 @@ st.markdown(f"""
     margin-top: 20px;
     font-size: 18px;
     font-weight: bold;
+    text-align: left;
 }}
 
 </style>
 """, unsafe_allow_html=True)
 
-# 🔝 ÜST BAR
-st.markdown('<div class="top-bar">☰ Dia</div>', unsafe_allow_html=True)
+# 📦 ANA PANEL
+st.markdown('<div class="main-box">', unsafe_allow_html=True)
 
-# 👤 KULLANICI
-st.markdown("""
-<div class="user-box">
-    <div class="user-avatar"></div>
-    <div class="user-name">Emre Durmaz</div>
-</div>
-""", unsafe_allow_html=True)
+st.markdown("### Ürün Değişim Değerlendirme")
 
-# 📦 PANEL
-st.markdown('<div class="main-card">', unsafe_allow_html=True)
-
-st.write("Dia - Online Arçelik Ürün Değişim Sistemlerine Hoşgeldiniz...")
-
-# 📥 ÇOKLU FİŞ GİRİŞİ
 fis_input = st.text_area("Fiş Numaraları (virgül ile ayır)")
 
-# 🚀 BUTON
 if st.button("İŞE BAŞLA"):
 
-    with st.spinner("Zeki tüm kayıtları inceliyor..."):
+    with st.spinner("Kayıtlar değerlendiriliyor..."):
         time.sleep(2)
 
     fis_list = [f.strip() for f in fis_input.split(",") if f.strip()]
