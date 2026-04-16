@@ -3,23 +3,24 @@ import time
 import random
 import base64
 
-# 🔥 SAYFA AYARI
+# 📌 SAYFA AYARI
 st.set_page_config(layout="wide")
 
-# 📌 BACKGROUND (dia.png)
+# 📌 ARKA PLAN (dia.png)
 def get_base64(file):
     with open(file, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
 img = get_base64("dia.png")
 
+# 🎨 CSS
 st.markdown(f"""
 <style>
 
-/* HER ŞEYİ TEMİZLE */
+/* ÜST MENÜLERİ KALDIR */
 header, footer, #MainMenu {{visibility: hidden;}}
 
-/* BACKGROUND */
+/* ARKA PLAN */
 .stApp {{
     background-image: url("data:image/png;base64,{img}");
     background-size: cover;
@@ -27,48 +28,55 @@ header, footer, #MainMenu {{visibility: hidden;}}
     background-repeat: no-repeat;
 }}
 
-/* İÇ KUTU YOK */
+/* TÜM İÇERİĞİ ORTALA */
 .block-container {{
-    background: transparent !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     padding-top: 120px;
-}}
-
-/* INPUT */
-textarea {{
-    background-color: #1e1e1e !important;
-    color: white !important;
-    border-radius: 10px !important;
-    padding: 12px !important;
-    font-size: 15px !important;
-}}
-
-/* BUTON */
-button {{
-    background-color: #111 !important;
-    color: white !important;
-    border-radius: 8px !important;
-    padding: 10px 20px !important;
-    font-weight: bold !important;
 }}
 
 /* BAŞLIK */
 .title {{
-    text-align:center;
-    font-size:32px;
-    color:white;
-    font-weight:bold;
-    margin-bottom:30px;
+    font-size: 34px;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: center;
+}}
+
+/* INPUT */
+textarea {{
+    width: 600px !important;
+    background-color: #1e1e1e !important;
+    color: white !important;
+    border-radius: 12px !important;
+    padding: 14px !important;
+    font-size: 16px !important;
+    border: none !important;
+}}
+
+/* BUTON */
+button {{
+    background-color: black !important;
+    color: white !important;
+    border-radius: 10px !important;
+    padding: 10px 25px !important;
+    font-weight: bold !important;
+    margin-top: 10px;
 }}
 
 /* SONUÇ BLOĞU */
 .result {{
-    background-color:#ff7a00;
-    color:white;
-    padding:20px;
-    border-radius:12px;
-    font-size:16px;
-    font-weight:bold;
-    margin-top:20px;
+    background-color: #ff7a00;
+    color: white;
+    padding: 20px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 30px;
+    width: 600px;
 }}
 
 </style>
@@ -90,7 +98,7 @@ if st.button("İŞE BAŞLA"):
         st.warning("Fiş girilmedi")
     else:
         with st.spinner("Kayıtlar kontrol ediliyor..."):
-            time.sleep(1.5)
+            time.sleep(1)
 
         fis_list = [f.strip() for f in fis_input.split(",") if f.strip()]
 
@@ -99,16 +107,18 @@ if st.button("İŞE BAŞLA"):
         for fis in fis_list:
 
             hedef = random.choice(["Hedef Altı", "Hedef Üstü"])
-            fiyat = random.choice([8000, 12000, 15000])
+            fiyat = random.choice([8000, 10000, 12000, 15000])
             stok = random.choice([True, False])
 
+            # 🔽 HEDEF ALTI
             if hedef == "Hedef Altı":
 
                 if stok:
                     sonuc = f"{fis} numaralı fiş için 20% KDV dahil {fiyat} TL fatura kesiniz notuyla kayıt servise yönlendirildi"
                 else:
-                    sonuc = f"{fis} numaralı fiş için stok bulunamadı, muadil ürün önerilir, 20% KDV dahil {fiyat} TL fatura kesiniz notuyla kayıt servise yönlendirildi"
+                    sonuc = f"{fis} numaralı fiş için muadil ürün önerilir, 20% KDV dahil {fiyat} TL fatura kesiniz notuyla kayıt servise yönlendirildi"
 
+            # 🔽 HEDEF ÜSTÜ
             else:
                 dekont = int(fiyat * 0.40)
                 fatura = fiyat - dekont
@@ -120,7 +130,6 @@ if st.button("İŞE BAŞLA"):
 
             tum_sonuclar.append(sonuc)
 
-        # 🎯 SONUÇ BAS
         sonuc_html = "<br><br>".join(tum_sonuclar)
 
         st.markdown(f"""
