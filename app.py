@@ -1,65 +1,70 @@
 import streamlit as st
 import time
 import random
+import base64
 
-# 🔥 ARKA PLAN (SENİN GÖRSELİN)
+# 🔥 LOCAL GÖRSELİ OKU (repo içinden)
+def get_base64(file_path):
+    with open(file_path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+img = get_base64("bg.png")
+
+# 🎨 ARKA PLAN + TASARIM
 st.markdown(
-    """
+    f"""
     <style>
-    .stApp {
-        background-image: url("https://images.unsplash.com/photo-1581090700227-4c4c5f0e1b5f");
+    .stApp {{
+        background-image: url("data:image/png;base64,{img}");
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
-    }
+    }}
 
-    /* ÜST BAR (Dia tarzı) */
-    .top-bar {
+    /* ÜST BAR */
+    .top-bar {{
         background-color: #3c3c3c;
         padding: 10px 20px;
         color: white;
         font-size: 18px;
         font-weight: bold;
-    }
+    }}
 
-    /* Kullanıcı alanı */
-    .user-box {
+    /* Kullanıcı */
+    .user-box {{
         display: flex;
         align-items: center;
         margin-top: 20px;
-        color: black;
-    }
+    }}
 
-    .user-avatar {
+    .user-avatar {{
         width: 60px;
         height: 60px;
         border-radius: 50%;
-        background-image: url("https://i.imgur.com/6VBx3io.png");
-        background-size: cover;
+        background-color: #2ecc71;
         margin-right: 15px;
-    }
+    }}
 
-    .user-name {
+    .user-name {{
         font-size: 20px;
         font-weight: bold;
-    }
+        color: black;
+    }}
 
     /* Panel */
-    .main-card {
+    .main-card {{
         background-color: rgba(255,255,255,0.9);
         padding: 25px;
         border-radius: 10px;
         margin-top: 20px;
-    }
+    }}
 
-    /* Sonuç kutusu */
-    .result-box {
+    .result-box {{
         background-color: #d4edda;
         padding: 15px;
         border-radius: 8px;
         margin-top: 15px;
-        font-size: 16px;
-    }
+    }}
     </style>
     """,
     unsafe_allow_html=True
@@ -79,15 +84,14 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# 📦 ANA PANEL
+# 📦 PANEL
 st.markdown('<div class="main-card">', unsafe_allow_html=True)
 
-st.markdown("**Dia - Online Arçelik Ürün Değişim Sistemlerine Hoşgeldiniz...**")
+st.write("Dia - Online Arçelik Ürün Değişim Sistemlerine Hoşgeldiniz...")
 
 fis = st.text_input("Fiş No")
 
 if st.button("DEĞERLENDİR"):
-
     with st.spinner("Zeki değerlendiriyor..."):
         time.sleep(2)
 
