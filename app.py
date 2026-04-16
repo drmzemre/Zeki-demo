@@ -3,14 +3,13 @@ import time
 import random
 import base64
 
-# 🔥 LOCAL GÖRSELİ OKU (repo içinden)
-def get_base64(file_path):
-    with open(file_path, "rb") as f:
+# 🔥 ARKA PLAN GÖRSELİ (bg.png)
+def get_base64(file):
+    with open(file, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
 img = get_base64("bg.png")
 
-# 🎨 ARKA PLAN + TASARIM
 st.markdown(
     f"""
     <style>
@@ -30,7 +29,7 @@ st.markdown(
         font-weight: bold;
     }}
 
-    /* Kullanıcı */
+    /* KULLANICI */
     .user-box {{
         display: flex;
         align-items: center;
@@ -51,19 +50,21 @@ st.markdown(
         color: black;
     }}
 
-    /* Panel */
+    /* ANA PANEL */
     .main-card {{
-        background-color: rgba(255,255,255,0.9);
+        background-color: rgba(255,255,255,0.92);
         padding: 25px;
         border-radius: 10px;
         margin-top: 20px;
     }}
 
+    /* SONUÇ */
     .result-box {{
         background-color: #d4edda;
         padding: 15px;
         border-radius: 8px;
         margin-top: 15px;
+        font-size: 16px;
     }}
     </style>
     """,
@@ -84,14 +85,17 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# 📦 PANEL
+# 📦 ANA PANEL
 st.markdown('<div class="main-card">', unsafe_allow_html=True)
 
 st.write("Dia - Online Arçelik Ürün Değişim Sistemlerine Hoşgeldiniz...")
 
+# 📥 FİŞ
 fis = st.text_input("Fiş No")
 
+# 🚀 BUTON
 if st.button("DEĞERLENDİR"):
+
     with st.spinner("Zeki değerlendiriyor..."):
         time.sleep(2)
 
