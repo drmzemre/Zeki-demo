@@ -85,7 +85,7 @@ with col2:
                     sonuclar.append(FIS_SONUCLARI[fis])
                 else:
                     sonuclar.append(
-                        f"{fis} numaralı fiş için tanımlı sonuç bulunamadı. Kayıt yetkili servise yönlendirildi."
+                        f"{fis} numaralı fiş sistemde bulunamadı."
                     )
 
             for s in sonuclar:
